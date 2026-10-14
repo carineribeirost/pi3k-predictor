@@ -96,8 +96,8 @@ impl MolIn {
         match (&self.fp, &self.error) {
             (Some(words), None) if words.len() == 64 => {
                 let mut fp = [0u64; 32];
-                for (w, pair) in fp.iter_mut().zip(words.chunks_exact(2)) {
-                    *w = u64::from(pair[0]) | u64::from(pair[1]) << 32;
+                for (w, [lo, hi]) in fp.iter_mut().zip(words.as_chunks::<2>().0) {
+                    *w = u64::from(*lo) | u64::from(*hi) << 32;
                 }
                 Ok(Some(fp))
             }

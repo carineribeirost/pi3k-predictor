@@ -66,13 +66,17 @@ impl Ensemble {
                 let feature = r.take(n_nodes)?.to_vec();
                 let payload: Vec<u32> = r
                     .take(n_nodes.checked_mul(4).ok_or("model file is corrupt")?)?
-                    .chunks_exact(4)
-                    .map(|c| u32::from_le_bytes(c.try_into().expect("4 bytes")))
+                    .as_chunks::<4>()
+                    .0
+                    .iter()
+                    .map(|c| u32::from_le_bytes(*c))
                     .collect();
                 let leaf_p: Vec<f64> = r
                     .take(n_leaves.checked_mul(8).ok_or("model file is corrupt")?)?
-                    .chunks_exact(8)
-                    .map(|c| f64::from_le_bytes(c.try_into().expect("8 bytes")))
+                    .as_chunks::<8>()
+                    .0
+                    .iter()
+                    .map(|c| f64::from_le_bytes(*c))
                     .collect();
                 for (i, (&f, &p)) in feature.iter().zip(&payload).enumerate() {
                     let ok = if f == LEAF {

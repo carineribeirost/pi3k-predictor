@@ -165,11 +165,13 @@ impl ModelStore {
             return Err("train_fps.bin does not match the training set size".into());
         }
         let train_fps = fp_bytes
-            .chunks_exact(256)
+            .as_chunks::<256>()
+            .0
+            .iter()
             .map(|row| {
                 let mut fp = [0u64; 32];
-                for (w, c) in fp.iter_mut().zip(row.chunks_exact(8)) {
-                    *w = u64::from_le_bytes(c.try_into().expect("8 bytes"));
+                for (w, c) in fp.iter_mut().zip(row.as_chunks::<8>().0) {
+                    *w = u64::from_le_bytes(*c);
                 }
                 fp
             })
