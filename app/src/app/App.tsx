@@ -3,6 +3,7 @@ import { createHashRouter, RouterProvider } from "react-router";
 import { Shell } from "./Shell";
 import { RunsPage } from "./pages/RunsPage";
 import { SettingsPage } from "./pages/SettingsPage";
+import { TargetPage } from "./pages/TargetPage";
 import { WelcomePage } from "./pages/WelcomePage";
 import { WorkspacePage } from "./pages/WorkspacePage";
 import "../shared/config/tokens.css";
@@ -20,6 +21,7 @@ const router = createHashRouter([
       { index: true, element: <WelcomePage /> },
       { path: "runs", element: <RunsPage /> },
       { path: "runs/:runId", element: <WorkspacePage /> },
+      { path: "target", element: <TargetPage /> },
       { path: "settings", element: <SettingsPage /> },
     ],
   },

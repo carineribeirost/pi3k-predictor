@@ -19,7 +19,8 @@ export default defineConfig(() => ({
     // 3. tell Vite to ignore watching `src-tauri`
     watch: { ignored: ["**/src-tauri/**"] },
   },
-  // The largest chunk is ECharts itself (about 580 kB), loaded only when the charts open.
-  build: { chunkSizeWarningLimit: 600 },
+  // Mol* (about 3.05 MB) and ECharts (about 580 kB) are their own chunks, loaded on demand;
+  // the main bundle is about 420 kB. The limit sits just above Mol*.
+  build: { chunkSizeWarningLimit: 3100 },
   test: { environment: "jsdom" },
 }));

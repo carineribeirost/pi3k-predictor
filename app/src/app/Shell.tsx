@@ -11,6 +11,11 @@ const NAV = [
   { to: "/", label: "Home", icon: "M3 11 12 3l9 8v10h-6v-6H9v6H3z" },
   { to: "/runs", label: "Runs", icon: "M4 5h16M4 12h16M4 19h16" },
   {
+    to: "/target",
+    label: "Target",
+    icon: "M12 3c-3 3-3 6 0 9s3 6 0 9M12 3c3 3 3 6 0 9s-3 6 0 9M7 6h10M7 18h10M8.5 9.5h7M8.5 14.5h7",
+  },
+  {
     to: "/settings",
     label: "Settings",
     icon: "M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1",
