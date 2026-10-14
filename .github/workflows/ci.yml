@@ -16,7 +16,7 @@ jobs:
       run:
         working-directory: app
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Linux system deps
         if: matrix.os == 'ubuntu-22.04'
@@ -24,7 +24,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: lts/*
           cache: npm
@@ -48,5 +48,12 @@ jobs:
 
       - run: npm run typecheck
       - run: npm run lint
-      - run: npm run format:check
+      # Prettier findings become annotations, so they show on the run page without opening the log.
+      - name: npm run format:check
+        shell: bash
+        run: |
+          npm run format:check 2>&1 | sed -E \
+            -e 's#^\[warn\] ([^ ]+\.[A-Za-z0-9]+)$#::error file=app/\1::Not formatted; run npm run format#' \
+            -e 's#^\[error\] (.*)$#::error::prettier: \1#'
+          exit ${PIPESTATUS[0]}
       - run: npm test
