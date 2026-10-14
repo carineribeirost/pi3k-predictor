@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
+import { exportRun, type ExportFormat } from "../../features/export/api/export";
 import { Inspector } from "../../features/inspector/ui/Inspector";
 import { useModelStatus, useReference } from "../../features/model/api/model";
 import { useRenameRun, useRun, useRunRows, useSetThreshold } from "../../features/runs/api/runs";
@@ -7,6 +8,7 @@ import { filterRows } from "../../features/workspace/lib/filter";
 import { ResultsTable } from "../../features/workspace/ui/ResultsTable";
 import { RunToolbar } from "../../features/workspace/ui/RunToolbar";
 import { inDomain } from "../../shared/lib/format";
+import type { IpcError } from "../../shared/lib/ipc";
 import { useWorkspace } from "../../shared/lib/workspace-store";
 import { ErrorBoundary } from "../../shared/ui/ErrorBoundary";
 import { useThemeKey } from "../theme";
@@ -24,7 +26,28 @@ export function WorkspacePage() {
   const ws = useWorkspace();
   const themeKey = useThemeKey();
   const [chartsOpen, setChartsOpen] = useState(true);
+  const [exporting, setExporting] = useState(false);
+  const [notice, setNotice] = useState<{ ok: boolean; text: string } | null>(null);
   const { resetForRun } = ws;
+
+  async function doExport(format: ExportFormat) {
+    setExporting(true);
+    setNotice(null);
+    try {
+      // Labels in the file use the saved threshold, so save a pending slider value first.
+      if (run.data && threshold !== run.data.threshold) await saveThreshold.mutateAsync({ runId, threshold });
+      const result = await exportRun(runId, format);
+      if (result) {
+        const skipped = result.skipped ? `, ${result.skipped} without a structure left out` : "";
+        setNotice({ ok: true, text: `Saved ${result.written} molecules to ${result.path}${skipped}` });
+      }
+    } catch (e) {
+      const err = e as IpcError;
+      setNotice({ ok: false, text: `Export failed: ${err.message ?? String(e)}` });
+    } finally {
+      setExporting(false);
+    }
+  }
 
   useEffect(() => resetForRun(), [runId, resetForRun]);
 
@@ -61,7 +84,17 @@ export function WorkspacePage() {
         onRename={(name) => rename.mutate({ runId, name })}
         onThresholdCommit={(t) => saveThreshold.mutate({ runId, threshold: t })}
         onAdd={() => ws.openAdd()}
+        onExport={(f) => void doExport(f)}
+        exporting={exporting}
       />
+      {notice && (
+        <div className={`notice ${notice.ok ? "" : "notice-error"}`} role="status">
+          <span className="mono">{notice.text}</span>
+          <button className="btn btn-ghost" onClick={() => setNotice(null)} aria-label="Dismiss">
+            ✕
+          </button>
+        </div>
+      )}
       <div className="ws-table">
         <ErrorBoundary area="results table">
           <ResultsTable rows={shown} threshold={threshold} selected={selectedRow?.index ?? null} onSelect={ws.select} />

@@ -243,6 +243,37 @@ pub fn get_rows(conn: &Connection, id: i64, offset: u32, limit: u32) -> Result<V
     Ok(rows)
 }
 
+/// Every row of a run with its molblock, for file exports.
+pub fn export_rows(conn: &Connection, id: i64) -> Result<Vec<(MolRow, Option<String>)>, AppError> {
+    let mut stmt = conn.prepare(
+        "SELECT idx, input_id, smiles, canonical, error, descriptors, prediction, molblock
+         FROM molecules WHERE run_id = ?1 ORDER BY idx",
+    )?;
+    let rows = stmt
+        .query_map([id], |r| {
+            Ok((
+                MolRow {
+                    index: r.get(0)?,
+                    input_id: r.get(1)?,
+                    smiles: r.get(2)?,
+                    canonical: r.get(3)?,
+                    error: r.get(4)?,
+                    descriptors: r.get(5)?,
+                    prediction: None,
+                },
+                r.get::<_, Option<String>>(6)?,
+                r.get::<_, Option<String>>(7)?,
+            ))
+        })?
+        .map(|row| {
+            let (mut mol, json, molblock) = row?;
+            mol.prediction = json.map(|j| serde_json::from_str(&j)).transpose().map_err(|e| AppError::Db(e.to_string()))?;
+            Ok((mol, molblock))
+        })
+        .collect::<Result<_, AppError>>()?;
+    Ok(rows)
+}
+
 fn changed(n: usize, id: i64) -> Result<(), AppError> {
     if n == 0 { Err(AppError::NotFound(format!("run {id}"))) } else { Ok(()) }
 }

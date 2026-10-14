@@ -156,26 +156,46 @@
 
 .workspace {
   display: grid;
+  grid-template-areas:
+    "toolbar toolbar"
+    "notice notice"
+    "table inspector"
+    "charts inspector";
   grid-template-columns: minmax(0, 1fr) 400px;
-  grid-template-rows: auto minmax(0, 1fr) 300px;
+  grid-template-rows: auto auto minmax(0, 1fr) 300px;
   height: 100%;
 }
 .workspace.charts-closed {
-  grid-template-rows: auto minmax(0, 1fr) 36px;
+  grid-template-rows: auto auto minmax(0, 1fr) 36px;
 }
 .workspace .toolbar {
-  grid-column: 1 / -1;
+  grid-area: toolbar;
+}
+.notice {
+  grid-area: notice;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 8px 4px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--accent-soft);
+  overflow-wrap: anywhere;
+}
+.notice-error {
+  background: var(--error-soft);
 }
 .ws-table {
+  grid-area: table;
   min-height: 0;
   background: var(--surface-1);
 }
 .ws-inspector {
-  grid-row: 2 / 4;
-  grid-column: 2;
+  grid-area: inspector;
   min-height: 0;
 }
 .ws-charts {
+  grid-area: charts;
   position: relative;
   min-height: 0;
   border-top: 1px solid var(--border);

@@ -24,6 +24,7 @@
     "allow-get-run-rows",
     "allow-rename-run",
     "allow-set-run-threshold",
-    "allow-delete-run"
+    "allow-delete-run",
+    "allow-export-run"
   ]
 }

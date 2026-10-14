@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-export-run"
+description = "Enables the export_run command without any pre-configured scope."
+commands.allow = ["export_run"]
+
+[[permission]]
+identifier = "deny-export-run"
+description = "Denies the export_run command without any pre-configured scope."
+commands.deny = ["export_run"]

@@ -19,6 +19,12 @@ pub enum AppError {
     Internal(String),
 }
 
+impl From<std::io::Error> for AppError {
+    fn from(e: std::io::Error) -> Self {
+        AppError::Io(e.to_string())
+    }
+}
+
 impl From<rusqlite::Error> for AppError {
     fn from(e: rusqlite::Error) -> Self {
         AppError::Db(e.to_string())

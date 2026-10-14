@@ -1,5 +1,6 @@
 mod commands;
 mod error;
+mod export;
 mod science;
 mod store;
 
@@ -28,6 +29,7 @@ pub fn run() {
 
     tauri::Builder::default()
         .plugin(log)
+        .plugin(tauri_plugin_dialog::init())
         .manage(ModelState::default())
         .setup(|app| {
             #[cfg(debug_assertions)]
@@ -74,6 +76,7 @@ pub fn run() {
             commands::rename_run,
             commands::set_run_threshold,
             commands::delete_run,
+            commands::export_run,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

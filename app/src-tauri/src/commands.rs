@@ -3,9 +3,11 @@ use std::sync::OnceLock;
 use rayon::prelude::*;
 use serde::Serialize;
 use tauri::{AppHandle, Manager};
+use tauri_plugin_dialog::DialogExt;
 use ts_rs::TS;
 
 use crate::error::AppError;
+use crate::export::{self, ExportResult};
 use crate::science::{ModelStore, Prediction, ReferenceData};
 use crate::store::{self, Db, MolIn, MolRow, RunSummary};
 
@@ -185,4 +187,73 @@ pub async fn set_run_threshold(app: AppHandle, run_id: i64, threshold: f64) -> R
 #[tauri::command]
 pub async fn delete_run(app: AppHandle, run_id: i64) -> Result<(), AppError> {
     blocking(app, move |app| with_db(app, |c| store::delete_run(c, run_id))).await
+}
+
+/// A file name derived from the run name, without characters Windows or macOS reject.
+fn file_stem(name: &str) -> String {
+    let s: String = name
+        .chars()
+        .map(|c| if c.is_control() || r#"<>:"/\|?*"#.contains(c) { '_' } else { c })
+        .take(100)
+        .collect();
+    let s = s.trim().trim_end_matches('.').to_owned();
+    if s.is_empty() { "run".into() } else { s }
+}
+
+/// Asks for a destination in a native save dialog and writes the run there.
+/// Returns None when the dialog is cancelled.
+#[tauri::command]
+pub async fn export_run(app: AppHandle, run_id: i64, format: String) -> Result<Option<ExportResult>, AppError> {
+    let (ext, label) = match format.as_str() {
+        "csv" => ("csv", "CSV"),
+        "xlsx" => ("xlsx", "Excel workbook"),
+        "sdf" => ("sdf", "SD file"),
+        _ => return Err(AppError::InvalidInput(format!("unknown export format {format}"))),
+    };
+    blocking(app, move |app| {
+        let run = with_db(app, |c| store::get_run(c, run_id))?;
+        let rows = with_db(app, |c| store::export_rows(c, run_id))?;
+        let m = model(app)?;
+        let table = export::table(&rows, run.threshold, m.reference.forests as usize, &m.reference.train.chembl_id);
+        let Some(file) = app
+            .dialog()
+            .file()
+            .set_file_name(format!("{}.{ext}", file_stem(&run.name)))
+            .add_filter(label, &[ext])
+            .blocking_save_file()
+        else {
+            return Ok(None);
+        };
+        let path = file.into_path().map_err(|e| AppError::Io(e.to_string()))?;
+        let (written, skipped) = match ext {
+            "csv" => {
+                std::fs::write(&path, export::to_csv(&table))?;
+                (rows.len() as u32, 0)
+            }
+            "xlsx" => {
+                export::write_xlsx(&table, &run, &path)?;
+                (rows.len() as u32, 0)
+            }
+            _ => {
+                let (sdf, written, skipped) = export::to_sdf(&table, &rows);
+                std::fs::write(&path, sdf)?;
+                (written, skipped)
+            }
+        };
+        log::info!("run {run_id} exported as {ext}: {written} written, {skipped} skipped");
+        Ok(Some(ExportResult { path: path.display().to_string(), written, skipped }))
+    })
+    .await
+}
+
+#[cfg(test)]
+mod tests {
+    use super::file_stem;
+
+    #[test]
+    fn file_stem_replaces_reserved_characters() {
+        assert_eq!(file_stem("Run: a/b?"), "Run_ a_b_");
+        assert_eq!(file_stem("  ..  "), "run");
+        assert_eq!(file_stem(&"x".repeat(300)).len(), 100);
+    }
 }

@@ -9,9 +9,11 @@ type Props = {
   onThresholdCommit: (t: number) => void;
   onRename: (name: string) => void;
   onAdd: () => void;
+  onExport: (format: "csv" | "xlsx" | "sdf") => void;
+  exporting: boolean;
 };
 
-export function RunToolbar({ run, threshold, counts, onThresholdCommit, onRename, onAdd }: Props) {
+export function RunToolbar({ run, threshold, counts, onThresholdCommit, onRename, onAdd, onExport, exporting }: Props) {
   const ws = useWorkspace();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(run.name);
@@ -105,6 +107,19 @@ export function RunToolbar({ run, threshold, counts, onThresholdCommit, onRename
         onChange={(e) => ws.setSearch(e.target.value)}
         aria-label="Search"
       />
+      <div className="segmented" role="group" aria-label="Export run">
+        {(
+          [
+            ["csv", "CSV"],
+            ["xlsx", "Excel"],
+            ["sdf", "SDF"],
+          ] as const
+        ).map(([f, label]) => (
+          <button key={f} onClick={() => onExport(f)} disabled={exporting} title={`Export as ${label}`}>
+            ↓ {label}
+          </button>
+        ))}
+      </div>
       <button className="btn btn-primary" onClick={onAdd}>
         + New prediction
       </button>

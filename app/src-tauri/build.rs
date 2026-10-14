@@ -15,6 +15,7 @@ fn main() {
                 "rename_run",
                 "set_run_threshold",
                 "delete_run",
+                "export_run",
             ])),
     )
     .expect("failed to run tauri-build");
