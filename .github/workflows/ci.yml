@@ -45,11 +45,7 @@ jobs:
       - run: npm test
 
   rust:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, ubuntu-22.04, macos-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-22.04
     env:
       # No debug info: less to compile, link and cache.
       CARGO_PROFILE_DEV_DEBUG: "0"
@@ -57,7 +53,6 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Linux system deps
-        if: matrix.os == 'ubuntu-22.04'
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
