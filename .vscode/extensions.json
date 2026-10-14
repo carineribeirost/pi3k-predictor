@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "vadimcn.vscode-lldb",
+    "rust-lang.rust-analyzer",
+    "tauri-apps.tauri-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.cpptools"
+  ]
+}

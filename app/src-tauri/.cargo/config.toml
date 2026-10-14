@@ -1,0 +1,5 @@
+[env]
+# Backtraces for `tauri dev` (Tauri runs the app through cargo). Does not override a value already set.
+RUST_BACKTRACE = "1"
+# ts-rs writes TS bindings here when `cargo test` runs.
+TS_RS_EXPORT_DIR = { value = "../src/bindings", relative = true }

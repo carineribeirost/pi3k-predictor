@@ -1,0 +1,34 @@
+{
+  // Native debugging per https://v2.tauri.app/develop/debug/vscode/ . These bypass the Tauri CLI.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Tauri Development Debug (CodeLLDB)",
+      "cargo": { "args": ["build", "--manifest-path=./app/src-tauri/Cargo.toml", "--no-default-features"] },
+      "cwd": "${workspaceFolder}/app",
+      "env": { "RUST_BACKTRACE": "1" },
+      "preLaunchTask": "ui:dev"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Tauri Production Debug (CodeLLDB)",
+      "cargo": {
+        "args": ["build", "--release", "--manifest-path=./app/src-tauri/Cargo.toml", "--features", "tauri/custom-protocol"]
+      },
+      "cwd": "${workspaceFolder}/app",
+      "preLaunchTask": "ui:build"
+    },
+    {
+      "type": "cppvsdbg",
+      "request": "launch",
+      "name": "Windows: Launch App Debug (cppvsdbg)",
+      "program": "${workspaceFolder}/app/src-tauri/target/debug/pi3k-predictor.exe",
+      "cwd": "${workspaceFolder}/app",
+      "environment": [{ "name": "RUST_BACKTRACE", "value": "1" }],
+      "preLaunchTask": "dev"
+    }
+  ]
+}

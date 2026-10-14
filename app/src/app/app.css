@@ -1,0 +1,12 @@
+:root {
+  color-scheme: light dark;
+  font-family: Inter, system-ui, sans-serif;
+}
+body {
+  margin: 0;
+  background: light-dark(#f8fafc, #0b1220);
+  color: light-dark(#0f172a, #e2e8f0);
+}
+.shell {
+  padding: 2rem;
+}

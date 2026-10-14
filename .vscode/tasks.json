@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ui:dev",
+      "type": "shell",
+      "isBackground": true,
+      "command": "npm run dev",
+      "options": { "cwd": "${workspaceFolder}/app" },
+      "problemMatcher": {
+        "owner": "vite",
+        "pattern": { "regexp": "^__never__$" },
+        // Starts active; ends on Vite's "ready in" / "Local:" line. (A beginsPattern matching that same
+        // line would swallow the end match, so it must never match.)
+        "background": { "activeBegins": true, "beginsPattern": "^__never__$", "endsPattern": "ready in|Local:" }
+      }
+    },
+    {
+      "label": "ui:build",
+      "type": "shell",
+      "command": "npm run build",
+      "options": { "cwd": "${workspaceFolder}/app" }
+    },
+    {
+      "label": "build:debug",
+      "type": "shell",
+      "command": "cargo build",
+      "options": { "cwd": "${workspaceFolder}/app/src-tauri" },
+      "problemMatcher": ["$rustc"]
+    },
+    {
+      "label": "dev",
+      "dependsOn": ["build:debug", "ui:dev"],
+      "group": { "kind": "build" }
+    }
+  ]
+}
