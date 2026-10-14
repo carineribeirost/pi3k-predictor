@@ -93,3 +93,23 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.add-dialog.wide {
+  width: min(1180px, calc(100vw - 32px));
+}
+.sketcher {
+  display: grid;
+  gap: 8px;
+}
+.sketcher-editor {
+  position: relative;
+  height: min(560px, calc(100vh - 340px));
+  min-height: 380px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.sketcher-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

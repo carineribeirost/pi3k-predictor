@@ -3,7 +3,7 @@ import { create } from "zustand";
 export type LabelFilter = "all" | "active" | "inactive";
 export type DomainFilter = "all" | "in" | "out";
 export type Theme = "system" | "light" | "dark";
-export type AddTab = "paste" | "file" | "example";
+export type AddTab = "paste" | "file" | "draw" | "example";
 
 type WorkspaceState = {
   /** Which tab the new-prediction dialog opened on, or null when it is closed. */

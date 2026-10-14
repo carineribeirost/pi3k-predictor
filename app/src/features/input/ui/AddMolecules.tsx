@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { ErrorBoundary } from "../../../shared/ui/ErrorBoundary";
 import type { IpcError } from "../../../shared/lib/ipc";
 import { rdkit } from "../../../shared/lib/rdkit/client";
 import type { PrepareItem } from "../../../shared/lib/rdkit/protocol";
@@ -10,7 +11,9 @@ import "./input.css";
 const MAX_MOLECULES = 200_000;
 type Loaded = { name: string; kind: "lines" | "sdf"; entries: Entry[] } | { name: string; kind: "table"; table: Table };
 
-export type Tab = "paste" | "file" | "example";
+export type Tab = "paste" | "file" | "draw" | "example";
+const TAB_LABELS: Record<Tab, string> = { paste: "Paste", file: "File", draw: "Draw", example: "Example" };
+const Sketcher = lazy(() => import("./Sketcher"));
 type Props = {
   open: boolean;
   initialTab: Tab;
@@ -83,7 +86,8 @@ export function AddMolecules({ open, initialTab, threshold, onClose, onDone }: P
   const pasteCheck = pasteResult?.lines === pasted ? pasteResult : null;
 
   const entries: Entry[] = useMemo(() => {
-    if (tab === "paste") return pasted;
+    // Drawn molecules are added to the pasted list, so both tabs predict the same entries.
+    if (tab === "paste" || tab === "draw") return pasted;
     if (tab === "example") return parseLines(exampleText);
     if (!loaded) return [];
     return loaded.kind === "table" ? tableEntries(loaded.table, cols.smiles, cols.id) : loaded.entries;
@@ -94,7 +98,9 @@ export function AddMolecules({ open, initialTab, threshold, onClose, onDone }: P
       ? `Example set, ${stamp()}`
       : tab === "file" && loaded
         ? loaded.name
-        : `Pasted molecules, ${stamp()}`;
+        : tab === "draw"
+          ? `Drawn molecules, ${stamp()}`
+          : `Pasted molecules, ${stamp()}`;
   const busy = progress !== null;
 
   async function load(file: File | undefined) {
@@ -117,7 +123,7 @@ export function AddMolecules({ open, initialTab, threshold, onClose, onDone }: P
     }
     setError(null);
     const items: PrepareItem[] = entries.map((e, index) => ({ index, smiles: e.smiles, inputId: e.inputId }));
-    const kind: InputKind = tab === "paste" ? "paste" : tab === "file" ? "file" : "example";
+    const kind: InputKind = tab === "draw" ? "sketch" : tab;
     try {
       const runId = await runPrediction({
         name: name.trim() || defaultName,
@@ -139,7 +145,12 @@ export function AddMolecules({ open, initialTab, threshold, onClose, onDone }: P
   }
 
   return (
-    <dialog ref={dialog} className="add-dialog" onClose={onClose} onCancel={(e) => busy && e.preventDefault()}>
+    <dialog
+      ref={dialog}
+      className={`add-dialog ${tab === "draw" ? "wide" : ""}`}
+      onClose={onClose}
+      onCancel={(e) => busy && e.preventDefault()}
+    >
       <header className="add-head">
         <h2>Add molecules</h2>
         <button className="btn btn-ghost" onClick={onClose} disabled={busy} aria-label="Close">
@@ -148,9 +159,9 @@ export function AddMolecules({ open, initialTab, threshold, onClose, onDone }: P
       </header>
 
       <div className="tabs" role="tablist">
-        {(["paste", "file", "example"] as Tab[]).map((t) => (
+        {(Object.keys(TAB_LABELS) as Tab[]).map((t) => (
           <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)} disabled={busy}>
-            {t === "paste" ? "Paste" : t === "file" ? "File" : "Example"}
+            {TAB_LABELS[t]}
           </button>
         ))}
       </div>
@@ -249,6 +260,21 @@ export function AddMolecules({ open, initialTab, threshold, onClose, onDone }: P
                 <li className="muted">{entries.length.toLocaleString()} molecules</li>
               </ul>
             )}
+          </>
+        )}
+
+        {tab === "draw" && (
+          <>
+            <ErrorBoundary area="structure editor">
+              <Suspense fallback={<div className="empty">Loading the structure editor…</div>}>
+                <Sketcher onAdd={(s) => setPaste((p) => (p.trim() ? `${p.trimEnd()}\n` : "") + s)} />
+              </Suspense>
+            </ErrorBoundary>
+            <p className="muted">
+              {pasted.length === 0
+                ? "Draw a molecule and add it to the list."
+                : `${pasted.length} molecule${pasted.length > 1 ? "s" : ""} in the list (see the Paste tab).`}
+            </p>
           </>
         )}
 
