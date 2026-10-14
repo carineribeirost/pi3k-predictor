@@ -52,8 +52,13 @@ jobs:
       - name: npm run format:check
         shell: bash
         run: |
-          npm run format:check 2>&1 | sed -E \
-            -e 's#^\[warn\] ([^ ]+\.[A-Za-z0-9]+)$#::error file=app/\1::Not formatted; run npm run format#' \
-            -e 's#^\[error\] (.*)$#::error::prettier: \1#'
-          exit ${PIPESTATUS[0]}
+          set +e
+          esc=$(printf '\033')
+          out=$(npm run format:check 2>&1 | tr -d '\r' | sed -E "s/${esc}\[[0-9;]*m//g"); code=$?
+          echo "$out"
+          if [ "$code" -ne 0 ]; then
+            echo "$out" | sed -nE 's#^\[warn\] ([^ ]+\.[A-Za-z0-9]+)$#::error file=app/\1::Not formatted; run npm run format#p'
+            echo "::error title=prettier::$(echo "$out" | tail -n 20 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')"
+          fi
+          exit "$code"
       - run: npm test
