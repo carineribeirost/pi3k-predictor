@@ -3,9 +3,9 @@
  "rdkit": "2026.03.6",
  "sklearn": "1.3.2",
  "resources": {
-  "bits.json": "2ef0cabc22dee19431a480b870e4487fee4a9d718564e3e350c2669a4bb2c188",
+  "bits.json": "bfe6e10c5c678b6f52faf897855bcb8c304f7bc7e11f9b6a859d547b222d57d3",
   "model.bin.zst": "c517839a7996b193509eda8691bf3adaebed33f2b25b0f0e296b17cd17e5a75b",
-  "reference.json": "6dcf5ae4664adb2aff10d97d22545d66826e8adbec2fde8e09104366336db504",
+  "reference.json": "26cba262293ae873fade74b1c9a5d73acef153f031a05d52e8036c8d34eb2db2",
   "train_fps.bin": "34ab234408d53b4680896c3958b8b93b1ed86f011aa7fbaeedfc661a997eba68"
  },
  "sources": {

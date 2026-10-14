@@ -75,5 +75,7 @@ out_path.write_text(
         },
         indent=1,
     )
+    + "\n",
+    newline="\n",
 )
 print(f"wrote {len(rows)} rows to {out_path}")

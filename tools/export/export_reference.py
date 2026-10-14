@@ -81,7 +81,7 @@ reference = {
         "distance": distance.round(6).tolist(),
     },
 }
-(res_dir / "reference.json").write_text(json.dumps(reference))
+(res_dir / "reference.json").write_text(json.dumps(reference) + "\n", newline="\n")
 
 # Per-bit explanation: frequent atom environments that set each model bit.
 forests = []
@@ -113,7 +113,7 @@ bits = [
     }
     for i, b in enumerate(SELECTED)
 ]
-(res_dir / "bits.json").write_text(json.dumps(bits, indent=1))
+(res_dir / "bits.json").write_text(json.dumps(bits, indent=1) + "\n", newline="\n")
 
 # Legacy vs corrected domain on the golden inputs.
 golden = json.load(open(golden_path))["rows"]
@@ -146,7 +146,7 @@ parity = {
         for s in ("example", "train")
     },
 }
-Path(parity_path).write_text(json.dumps(parity, indent=1))
+Path(parity_path).write_text(json.dumps(parity, indent=1) + "\n", newline="\n")
 
 
 def sha256(path):
@@ -163,5 +163,5 @@ manifest = {
         "data/train_data_complete.csv": sha256(legacy_repo / "data" / "train_data_complete.csv"),
     },
 }
-(res_dir / "model_manifest.json").write_text(json.dumps(manifest, indent=1))
+(res_dir / "model_manifest.json").write_text(json.dumps(manifest, indent=1) + "\n", newline="\n")
 print(json.dumps(parity, indent=1))
