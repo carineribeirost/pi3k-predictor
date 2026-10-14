@@ -25,6 +25,8 @@ ruzstd = "0.9"
 rusqlite = { version = "0.40", features = ["bundled"] }
 rayon = "1"
 tauri-plugin-dialog = "=2.8.2"
+tauri-plugin-updater = "=2.13.3"
+tauri-plugin-process = "=2.4.0"
 rust_xlsxwriter = "0.99"
 
 # https://tauri.app/concept/size/#cargo-configuration

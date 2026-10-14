@@ -41,5 +41,11 @@
     "targets": "all",
     "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
     "resources": ["resources/*"]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZGMUUxOEYyQzRDNjREMDAKUldRQVRjYkU4aGdlLy9wajFKNGU1aXY4NzlOMUw0MW83S1FpTTBmODRuYklDaDZDZnQzVGNxY0EK",
+      "endpoints": ["https://github.com/carineribeirost/pi3k-predictor/releases/latest/download/latest.json"]
+    }
   }
 }

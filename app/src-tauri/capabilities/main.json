@@ -7,6 +7,8 @@
   "permissions": [
     "core:default",
     "log:default",
+    "process:allow-restart",
+    "updater:default",
     "allow-app-info",
     "allow-model-status",
     "allow-reference-data",

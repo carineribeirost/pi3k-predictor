@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { AppInfo } from "../../bindings/AppInfo";
 import { getAppInfo } from "../../features/about/api/get-app-info";
 import { useModelStatus, useReference } from "../../features/model/api/model";
+import { UpdatePanel } from "../../features/updates/ui/UpdatePanel";
 import { useWorkspace, type Theme } from "../../shared/lib/workspace-store";
 
 const LICENSES = [
@@ -34,6 +35,10 @@ export function SettingsPage() {
             </button>
           ))}
         </div>
+      </section>
+      <section className="panel">
+        <h2 className="label">Updates</h2>
+        <UpdatePanel />
       </section>
       <section className="panel">
         <h2 className="label">About</h2>

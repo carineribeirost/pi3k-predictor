@@ -242,3 +242,16 @@
     grid-template-columns: minmax(0, 1fr) 340px;
   }
 }
+.update-panel {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+.update-panel p {
+  margin: 0;
+}
+.release-notes {
+  max-height: 160px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
