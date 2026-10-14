@@ -4,3 +4,4 @@
 *.icns binary
 *.bin binary
 *.zst binary
+*.bcif binary
