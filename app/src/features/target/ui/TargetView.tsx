@@ -86,10 +86,6 @@ export function TargetView({ themeKey }: { themeKey: string }) {
           PDB 4JPS, X-ray, 2.2 Å: p110α with the niSH2 fragment of p85α and alpelisib (ligand 1LT). Domain boundaries
           come from UniProt P42336.
         </p>
-        <p className="muted">
-          The predictor learned from measured activities, not from this structure. It does not dock molecules, so your
-          compounds are never placed in the pocket.
-        </p>
       </aside>
     </div>
   );

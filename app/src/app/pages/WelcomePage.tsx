@@ -27,7 +27,7 @@ export function WelcomePage() {
       <div className="hero-row">
         <section className="hero">
           <p className="label">PI3Kα activity predictor</p>
-          <h1>Triage molecules against PI3Kα, with the evidence next to every call.</h1>
+          <h1>Triage molecules against PI3Kα</h1>
           <p className="muted">
             An ensemble of {ref?.forests ?? 10} random forests trained on ChEMBL bioactivity data predicts whether a
             molecule inhibits the PI3Kα kinase. Each prediction comes with model agreement, an applicability-domain
