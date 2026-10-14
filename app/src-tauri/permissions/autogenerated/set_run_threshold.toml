@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-set-run-threshold"
+description = "Enables the set_run_threshold command without any pre-configured scope."
+commands.allow = ["set_run_threshold"]
+
+[[permission]]
+identifier = "deny-set-run-threshold"
+description = "Denies the set_run_threshold command without any pre-configured scope."
+commands.deny = ["set_run_threshold"]

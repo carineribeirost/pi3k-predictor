@@ -72,7 +72,7 @@ reference = {
     "distance_threshold": distance_threshold,
     "k": K,
     "train": {
-        "chembl_id": train["molecule_chembl_id"].tolist(),
+        "chemblId": train["molecule_chembl_id"].tolist(),
         "smiles": train["canonical_smiles"].tolist(),
         "pic50": train["standard_value"].round(4).tolist(),
         "active": train["bioactivity_class"].astype(int).tolist(),
@@ -107,8 +107,8 @@ bits = [
     {
         "bit": b,
         "importance": float(importance[i]),
-        "freq_active": float(fps[active, b].mean()),
-        "freq_inactive": float(fps[~active, b].mean()),
+        "freqActive": float(fps[active, b].mean()),
+        "freqInactive": float(fps[~active, b].mean()),
         "smarts": [s for s, _ in envs[b].most_common(3)],
     }
     for i, b in enumerate(SELECTED)

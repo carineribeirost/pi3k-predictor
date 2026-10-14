@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-predict-one"
+description = "Enables the predict_one command without any pre-configured scope."
+commands.allow = ["predict_one"]
+
+[[permission]]
+identifier = "deny-predict-one"
+description = "Denies the predict_one command without any pre-configured scope."
+commands.deny = ["predict_one"]

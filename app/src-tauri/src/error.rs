@@ -7,6 +7,22 @@ use ts_rs::TS;
 pub enum AppError {
     #[error("I/O error: {0}")]
     Io(String),
+    #[error("invalid input: {0}")]
+    InvalidInput(String),
+    #[error("not found: {0}")]
+    NotFound(String),
+    #[error("model not ready: {0}")]
+    ModelNotReady(String),
+    #[error("database error: {0}")]
+    Db(String),
+    #[error("internal error: {0}")]
+    Internal(String),
+}
+
+impl From<rusqlite::Error> for AppError {
+    fn from(e: rusqlite::Error) -> Self {
+        AppError::Db(e.to_string())
+    }
 }
 
 #[cfg(test)]

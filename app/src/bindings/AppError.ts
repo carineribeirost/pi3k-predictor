@@ -3,4 +3,4 @@
 /**
  * The single error type returned by every command. Serialized as `{ kind, message }`.
  */
-export type AppError = { "kind": "io", "message": string };
+export type AppError = { "kind": "io", "message": string } | { "kind": "invalidInput", "message": string } | { "kind": "notFound", "message": string } | { "kind": "modelNotReady", "message": string } | { "kind": "db", "message": string } | { "kind": "internal", "message": string };
