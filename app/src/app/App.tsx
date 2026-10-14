@@ -1,29 +1,34 @@
-import { useEffect, useState } from "react";
-import type { AppInfo } from "../bindings/AppInfo";
-import { getAppInfo } from "../features/about/api/get-app-info";
-import type { IpcError } from "../shared/lib/ipc";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createHashRouter, RouterProvider } from "react-router";
+import { Shell } from "./Shell";
+import { RunsPage } from "./pages/RunsPage";
+import { SettingsPage } from "./pages/SettingsPage";
+import { WelcomePage } from "./pages/WelcomePage";
+import { WorkspacePage } from "./pages/WorkspacePage";
+import "../shared/config/tokens.css";
+import "../shared/ui/ui.css";
+import "./app.css";
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } },
+});
+
+const router = createHashRouter([
+  {
+    element: <Shell />,
+    children: [
+      { index: true, element: <WelcomePage /> },
+      { path: "runs", element: <RunsPage /> },
+      { path: "runs/:runId", element: <WorkspacePage /> },
+      { path: "settings", element: <SettingsPage /> },
+    ],
+  },
+]);
 
 export function App() {
-  const [info, setInfo] = useState<AppInfo>();
-  const [err, setErr] = useState<IpcError>();
-
-  useEffect(() => {
-    getAppInfo().then(setInfo, setErr);
-  }, []);
-
   return (
-    <main className="shell">
-      <h1>PI3Kα Predictor</h1>
-      {info && (
-        <p>
-          v{info.version} · logs: <code>{info.logDir}</code>
-        </p>
-      )}
-      {err && (
-        <p role="alert">
-          {err.kind}: {err.message}
-        </p>
-      )}
-    </main>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }

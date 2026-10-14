@@ -1,6 +1,5 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
-// @ts-expect-error type error without @types/node package
 import process from "node:process";
 const host = process.env.TAURI_DEV_HOST;
 
@@ -20,5 +19,7 @@ export default defineConfig(() => ({
     // 3. tell Vite to ignore watching `src-tauri`
     watch: { ignored: ["**/src-tauri/**"] },
   },
+  // The largest chunk is ECharts itself (about 580 kB), loaded only when the charts open.
+  build: { chunkSizeWarningLimit: 600 },
   test: { environment: "jsdom" },
 }));

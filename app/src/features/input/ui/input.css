@@ -1,0 +1,95 @@
+.add-dialog {
+  width: min(720px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-1);
+  color: var(--text);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+.add-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.45);
+}
+.add-head,
+.add-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+}
+.add-head h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.add-dialog .tabs {
+  padding: 0 20px;
+}
+.add-body {
+  display: grid;
+  gap: 10px;
+  min-height: 260px;
+  padding: 16px 20px;
+  align-content: start;
+}
+.add-body p {
+  margin: 0;
+}
+.add-foot {
+  border-top: 1px solid var(--border);
+}
+.add-foot .input {
+  flex: 1;
+}
+.add-progress {
+  display: grid;
+  gap: 6px;
+  padding: 0 20px 16px;
+}
+.add-error {
+  margin: 0 20px 16px;
+  white-space: normal;
+}
+.dropzone {
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  padding: 36px 16px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  cursor: pointer;
+}
+.dropzone.dragging {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.dropzone input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.col-pick {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.col-pick label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+}
+.preview {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  list-style: none;
+  overflow: hidden;
+}
+.preview li {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

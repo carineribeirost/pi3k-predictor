@@ -3,6 +3,10 @@ import type { Analog } from "./Analog";
 
 export type Prediction = { 
 /**
+ * The 32 model inputs; bit i is selected fingerprint bit i.
+ */
+bits: number, 
+/**
  * P(active) from each forest, in model file order.
  */
 probs: Array<number>, mean: number, 

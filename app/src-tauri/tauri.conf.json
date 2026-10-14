@@ -14,12 +14,13 @@
     "windows": [
       {
         "label": "main",
-        "title": "PI3K\u00ce\u00b1 Predictor",
+        "title": "PI3KÎ± Predictor",
         "width": 1440,
         "height": 900,
         "minWidth": 1100,
         "minHeight": 700,
-        "center": true
+        "center": true,
+        "dragDropEnabled": false
       }
     ],
     "security": {

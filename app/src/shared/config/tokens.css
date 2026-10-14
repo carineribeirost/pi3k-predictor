@@ -1,0 +1,107 @@
+:root {
+  color-scheme: light;
+  --bg: #f6f7f9;
+  --surface-1: #ffffff;
+  --surface-2: #f0f2f5;
+  --surface-3: #e4e7ec;
+  --border: #d7dbe2;
+  --text: #111827;
+  --text-muted: #5b6474;
+  --accent: #0f766e;
+  --accent-soft: #ccebe7;
+  --on-accent: #ffffff;
+  --active: #c2410c;
+  --active-soft: #fde7da;
+  --inactive: #64748b;
+  --inactive-soft: #e7ebf0;
+  --ood: #b45309;
+  --ood-soft: #fdf0d5;
+  --error: #b91c1c;
+  --error-soft: #fde2e2;
+  --train-point: rgba(100, 116, 139, 0.35);
+  --focus: 0 0 0 2px var(--surface-1), 0 0 0 4px var(--accent);
+  --radius: 8px;
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0d1117;
+    --surface-1: #151b23;
+    --surface-2: #1c2430;
+    --surface-3: #263142;
+    --border: #2d3848;
+    --text: #e6edf3;
+    --text-muted: #9aa6b5;
+    --accent: #2dd4bf;
+    --accent-soft: #123f3b;
+    --on-accent: #062a26;
+    --active: #fb923c;
+    --active-soft: #4a2412;
+    --inactive: #94a3b8;
+    --inactive-soft: #263142;
+    --ood: #fbbf24;
+    --ood-soft: #3f2e0a;
+    --error: #f87171;
+    --error-soft: #3f1515;
+    --train-point: rgba(148, 163, 184, 0.3);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d1117;
+  --surface-1: #151b23;
+  --surface-2: #1c2430;
+  --surface-3: #263142;
+  --border: #2d3848;
+  --text: #e6edf3;
+  --text-muted: #9aa6b5;
+  --accent: #2dd4bf;
+  --accent-soft: #123f3b;
+  --on-accent: #062a26;
+  --active: #fb923c;
+  --active-soft: #4a2412;
+  --inactive: #94a3b8;
+  --inactive-soft: #263142;
+  --ood: #fbbf24;
+  --ood-soft: #3f2e0a;
+  --error: #f87171;
+  --error-soft: #3f1515;
+  --train-point: rgba(148, 163, 184, 0.3);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

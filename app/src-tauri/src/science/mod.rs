@@ -27,6 +27,8 @@ pub struct Analog {
 #[serde(rename_all = "camelCase")]
 #[ts(export)]
 pub struct Prediction {
+    /// The 32 model inputs; bit i is selected fingerprint bit i.
+    pub bits: u32,
     /// P(active) from each forest, in model file order.
     pub probs: Vec<f64>,
     pub mean: f64,
@@ -222,6 +224,7 @@ impl ModelStore {
         let leverage = self.domain.leverage(pca);
         let distance = self.domain.knn_distance(pca);
         Prediction {
+            bits,
             probs,
             mean,
             std,

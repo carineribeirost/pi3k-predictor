@@ -1,0 +1,171 @@
+.inspector {
+  height: 100%;
+  overflow: auto;
+  padding: 12px 16px 24px;
+  border-left: 1px solid var(--border);
+  background: var(--surface-1);
+}
+.insp-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.insp-title h2 {
+  margin: 0;
+  overflow: hidden;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.insp-section {
+  border-bottom: 1px solid var(--border);
+}
+.insp-section summary {
+  padding: 10px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.insp-content {
+  display: grid;
+  gap: 8px;
+  padding-bottom: 14px;
+}
+.insp-content p {
+  margin: 0;
+}
+.insp-mol {
+  margin: 0 auto;
+}
+.insp-smiles {
+  overflow-wrap: anywhere;
+}
+.big-p {
+  display: grid;
+}
+.big-p strong {
+  font-size: 30px;
+  line-height: 1.1;
+}
+.strip {
+  width: 100%;
+  height: 44px;
+}
+.strip-axis {
+  stroke: var(--border);
+  stroke-width: 2;
+}
+.strip-threshold {
+  stroke: var(--text-muted);
+  stroke-dasharray: 3 3;
+}
+.strip-band {
+  fill: var(--accent-soft);
+}
+.strip-dot {
+  fill: var(--inactive);
+  stroke: var(--surface-1);
+  stroke-width: 1.5;
+}
+.strip-dot.active {
+  fill: var(--active);
+}
+.strip-tick {
+  fill: var(--text-muted);
+  font-size: 9px;
+}
+.bullet {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+}
+.bullet-head {
+  display: flex;
+  justify-content: space-between;
+}
+.bullet .bar {
+  overflow: visible;
+}
+.bullet .tick {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 12px;
+  background: var(--text);
+}
+.analogs,
+.bits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.analogs li {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+.analogs .sim {
+  font-size: 15px;
+  font-weight: 600;
+}
+.txt-active {
+  color: var(--active);
+  font-weight: 600;
+}
+.bits li {
+  display: grid;
+  grid-template-columns: 44px 14px 1fr 72px;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 4px;
+  border-radius: 4px;
+}
+.bits li:hover,
+.bits li:focus {
+  background: var(--surface-2);
+}
+.bits li:not(.on) {
+  opacity: 0.6;
+}
+.bits .freq {
+  font-size: 12px;
+  text-align: right;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--inactive);
+  border-radius: 50%;
+}
+.dot-on {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.props {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 16px;
+  margin: 0;
+}
+.props div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.props dt {
+  color: var(--text-muted);
+}
+.props dd {
+  margin: 0;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

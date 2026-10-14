@@ -1,0 +1,55 @@
+.runs {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.runs li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+}
+.runs.compact li {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.run-open {
+  display: grid;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.run-open:hover strong {
+  color: var(--accent);
+}
+.run-stats {
+  display: flex;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.run-actions {
+  display: flex;
+  gap: 4px;
+}
+.runs .ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.runs .txt-active {
+  color: var(--active);
+}
+.runs .warn {
+  color: var(--ood);
+}

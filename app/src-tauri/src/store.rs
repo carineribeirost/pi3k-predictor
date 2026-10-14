@@ -303,6 +303,7 @@ mod tests {
         let ok = mol(0, Some(vec![0; 64]), None);
         let bad = mol(1, None, Some("unclosed ring"));
         let p = Prediction {
+            bits: 0,
             probs: vec![0.9; 10],
             mean: 0.9,
             std: 0.0,

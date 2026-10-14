@@ -1,0 +1,19 @@
+.chart-strip {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--surface-1);
+}
+.chart-strip .tabs {
+  align-items: center;
+  padding: 0 12px;
+}
+.chart-hint {
+  margin-left: auto;
+  font-size: 12px;
+}
+.echart {
+  flex: 1;
+  min-height: 0;
+}
