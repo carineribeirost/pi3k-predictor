@@ -1,0 +1,24 @@
+{
+ "model_version": "1.0.0",
+ "rdkit": "2026.03.6",
+ "sklearn": "1.3.2",
+ "resources": {
+  "bits.json": "2ef0cabc22dee19431a480b870e4487fee4a9d718564e3e350c2669a4bb2c188",
+  "model.bin.zst": "c517839a7996b193509eda8691bf3adaebed33f2b25b0f0e296b17cd17e5a75b",
+  "reference.json": "6dcf5ae4664adb2aff10d97d22545d66826e8adbec2fde8e09104366336db504",
+  "train_fps.bin": "34ab234408d53b4680896c3958b8b93b1ed86f011aa7fbaeedfc661a997eba68"
+ },
+ "sources": {
+  "model/model_molecule0.pkl": "3f997944a2162724eddc0b228266eb5e29d044716c03cc8784e7e8d23d6697bf",
+  "model/model_molecule1.pkl": "744a49310d6ba37fee9921b8ddd1399a2eb705f89fea22bd0fc45b4e56367060",
+  "model/model_molecule2.pkl": "e7ad05bc4b3c9db2831aa90f0665407b364b90325b4aea3ee08a9877c91d18d8",
+  "model/model_molecule3.pkl": "b35552bec44f082ebe4aa0b2969180bab443efc76331634187fa8dc2196e893d",
+  "model/model_molecule4.pkl": "bc277f488cf6c2d4f5ede37c540010b89287aa459c6104efe46927166715d905",
+  "model/model_molecule5.pkl": "b38cd835e3099f9faed19fdd93c729f061d11605d002edc8d1e91eb2509607c5",
+  "model/model_molecule6.pkl": "19e676c72163a8e05e23f2bfbd841ff43dc182cfa8210a9f1876e325bbef19ae",
+  "model/model_molecule7.pkl": "f7da85b9d0f589cf911f91da08eb20879a8685d42038176292e19617f0a9352f",
+  "model/model_molecule8.pkl": "86a45a42dc5ccd41b937dc351f0467bd13f66e06bdf86e1dc40fafc561a50834",
+  "model/model_molecule9.pkl": "509856d5f05c3fece4ae904d15d8e3cbb95c76a10957ffd050037ab04301a711",
+  "data/train_data_complete.csv": "150e181177d84a7cbf1a50baf390ab9e1792a4f83ad94be01a3b1b63f6e76faf"
+ }
+}

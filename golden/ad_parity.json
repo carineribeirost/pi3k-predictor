@@ -1,0 +1,25 @@
+{
+ "csv_rows": 4077,
+ "csv_bits_match_rows": 4068,
+ "legacy_distance_threshold": 1.9879704274925278,
+ "corrected_distance_threshold": 1.9877368156288835,
+ "legacy_leverage_threshold": 0.0022,
+ "corrected_leverage_threshold": 0.002207505518763797,
+ "train_inside_corrected": 4077,
+ "golden": {
+  "example": {
+   "n": 32,
+   "inside_legacy": 32,
+   "inside_corrected": 32,
+   "verdict_changed": 0,
+   "max_abs_pca_diff": 0.8103557498590843
+  },
+  "train": {
+   "n": 500,
+   "inside_legacy": 500,
+   "inside_corrected": 500,
+   "verdict_changed": 0,
+   "max_abs_pca_diff": 1.1942094729899142
+  }
+ }
+}
