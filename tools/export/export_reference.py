@@ -1,7 +1,7 @@
 """Build the training-set reference the app needs: corrected applicability domain,
 packed fingerprints for nearest analogs, per-bit explanations and the manifest.
 
-Usage: uv run python export_reference.py <legacy-repo> <resources-dir> <golden.json> <parity.json>
+Usage: uv run python export_reference.py <legacy-repo> <resources-dir> <streamlit_predictions.json> <parity.json>
 
 train_fps.bin holds one 2048-bit Morgan fingerprint (radius 3) per training row as
 32 little-endian u64 words; bit j sits in word j // 64 at position j % 64.
@@ -31,7 +31,7 @@ SELECTED = [80, 314, 350, 352, 407, 489, 523, 695, 699, 807, 875, 896, 926, 1019
             1088, 1097, 1114, 1152, 1160, 1171, 1199, 1357, 1385, 1452, 1480, 1487, 1535, 1722, 1855, 1866]
 RADIUS, NBITS, K, Z = 3, 2048, 10, 0.5
 
-legacy_repo, res_dir, golden_path, parity_path = map(Path, sys.argv[1:5])
+legacy_repo, res_dir, predictions_path, parity_path = map(Path, sys.argv[1:5])
 res_dir.mkdir(parents=True, exist_ok=True)
 train = pd.read_csv(legacy_repo / "data" / "train_data_complete.csv")
 mols = [Chem.MolFromSmiles(s) for s in train["canonical_smiles"]]
@@ -48,7 +48,8 @@ csv_cols = [c for c in train.columns if c.isdigit()]
 csv_bits_match = int((train[csv_cols].to_numpy() == fps[:, [int(c) for c in csv_cols]]).all(axis=1).sum())
 
 x32 = fps[:, SELECTED].astype(np.float64)
-pca = PCA(n_components=2).fit(x32)
+# The exact solver: the default picks a randomized SVD here, which changes slightly on every run.
+pca = PCA(n_components=2, svd_solver="full").fit(x32)
 scores = pca.transform(x32)
 xtx_inv = np.linalg.inv(scores.T @ scores)
 leverage = np.einsum("ij,jk,ik->i", scores, xtx_inv, scores)
@@ -115,18 +116,18 @@ bits = [
 ]
 (res_dir / "bits.json").write_text(json.dumps(bits, indent=1) + "\n", newline="\n")
 
-# Legacy vs corrected domain on the golden inputs.
-golden = json.load(open(golden_path))["rows"]
-gx = np.array([r["bits"] for r in golden], dtype=np.float64)
+# Legacy vs corrected domain on the molecules captured from the Streamlit app.
+captured = json.load(open(predictions_path))["rows"]
+gx = np.array([r["bits"] for r in captured], dtype=np.float64)
 g_scores = pca.transform(gx)
 g_lev = np.einsum("ij,jk,ik->i", g_scores, xtx_inv, g_scores)
 g_dist = np.sort(cdist(g_scores, scores), axis=1)[:, :K].mean(axis=1)
 legacy_pca = train[["PCA0", "PCA1"]].to_numpy()
 legacy_pair = cdist(legacy_pca, legacy_pca)
 legacy_distance_threshold = float(legacy_pair.mean() + Z * legacy_pair.std())
-old_in = np.array([(r["leverage"] <= 0.0022) and (r["distance"] <= legacy_distance_threshold) for r in golden])
+old_in = np.array([(r["leverage"] <= 0.0022) and (r["distance"] <= legacy_distance_threshold) for r in captured])
 new_in = (g_lev <= leverage_threshold) & (g_dist <= distance_threshold)
-src = np.array([r["source"] for r in golden])
+src = np.array([r["source"] for r in captured])
 parity = {
     "csv_rows": len(train),
     "csv_bits_match_rows": csv_bits_match,
@@ -135,13 +136,13 @@ parity = {
     "legacy_leverage_threshold": 0.0022,
     "corrected_leverage_threshold": leverage_threshold,
     "train_inside_corrected": int(((leverage <= leverage_threshold) & (distance <= distance_threshold)).sum()),
-    "golden": {
+    "captured": {
         s: {
             "n": int((src == s).sum()),
             "inside_legacy": int(old_in[src == s].sum()),
             "inside_corrected": int(new_in[src == s].sum()),
             "verdict_changed": int((old_in != new_in)[src == s].sum()),
-            "max_abs_pca_diff": float(np.abs(g_scores - np.array([r["pca"] for r in golden]))[src == s].max()),
+            "max_abs_pca_diff": float(np.abs(g_scores - np.array([r["pca"] for r in captured]))[src == s].max()),
         }
         for s in ("example", "train")
     },

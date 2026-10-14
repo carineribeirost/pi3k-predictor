@@ -253,13 +253,14 @@ mod tests {
     static MODEL: LazyLock<ModelStore> =
         LazyLock::new(|| ModelStore::load(&PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("resources")).unwrap());
 
+    /// Predictions captured from the original Streamlit app (tools/export/capture_streamlit_predictions.py).
     #[derive(Deserialize)]
-    struct Golden {
-        rows: Vec<GoldenRow>,
+    struct StreamlitPredictions {
+        rows: Vec<StreamlitRow>,
     }
 
     #[derive(Deserialize)]
-    struct GoldenRow {
+    struct StreamlitRow {
         bits: Vec<u8>,
         probs: Vec<f64>,
         mean: f64,
@@ -267,10 +268,10 @@ mod tests {
 
     #[test]
     fn forests_match_scikit_learn_exactly() {
-        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../golden/legacy.json");
-        let golden: Golden = serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
-        assert_eq!(golden.rows.len(), 532);
-        for row in &golden.rows {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/streamlit_predictions.json");
+        let expected: StreamlitPredictions = serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
+        assert_eq!(expected.rows.len(), 532);
+        for row in &expected.rows {
             let bits = row.bits.iter().enumerate().fold(0u32, |acc, (i, &b)| acc | u32::from(b) << i);
             let probs = MODEL.ensemble.predict(bits);
             for (got, want) in probs.iter().zip(&row.probs) {

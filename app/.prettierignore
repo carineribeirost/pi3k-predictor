@@ -4,3 +4,5 @@ src-tauri/gen
 src/bindings
 # Generated data; model_manifest.json pins their hashes.
 src-tauri/resources
+# Captured from the original Streamlit app by tools/export.
+src-tauri/tests/fixtures

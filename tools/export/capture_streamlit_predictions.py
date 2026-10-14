@@ -1,6 +1,9 @@
 """Run the legacy Streamlit pipeline unchanged and record its outputs as test fixtures.
 
-Usage: uv run --all-groups python golden_legacy.py <legacy-repo> <out.json>
+Usage: uv run --all-groups python capture_streamlit_predictions.py <legacy-repo> <streamlit_predictions.json>
+
+The forest probabilities are reproducible. The pca, leverage and distance fields are not: the legacy
+app fits its PCA with scikit-learn's randomized solver, so they move slightly from run to run.
 """
 
 import glob
@@ -42,7 +45,7 @@ assert len(model_order) == len(predictor.models) == 10
 
 df = pd.DataFrame({"SMILES": smiles})
 descriptors, kept = fp_generator.generate_descriptors(df, smiles_column="SMILES")
-assert kept == list(range(len(smiles))), "golden inputs must all parse"
+assert kept == list(range(len(smiles))), "every captured SMILES must parse"
 
 mean_prob, _ = predictor.predict(descriptors)
 per_forest = np.array([m.predict_proba(descriptors)[:, 1] for m in predictor.models]).T

@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-# Only needed to run the legacy pipeline unchanged for the golden outputs.
+# Only needed to run the legacy pipeline unchanged to capture its predictions as test fixtures.
 legacy = [
     "plotly==5.24.1",
     "qsar_ad @ git+https://github.com/carineribeirost/qsar_ad.git@484cc50408e5ab6a32783a2e416a76c1b1cdf420",

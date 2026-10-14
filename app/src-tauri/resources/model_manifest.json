@@ -5,7 +5,7 @@
  "resources": {
   "bits.json": "3149ef8a693b095c1f712c212086acc8e3ff0d68b1744cb48f6ac122e3ba81ea",
   "model.bin.zst": "c517839a7996b193509eda8691bf3adaebed33f2b25b0f0e296b17cd17e5a75b",
-  "reference.json": "64959676f79d492391e9a242bc838d095aaac7ad419e405c84f523a0d7714502",
+  "reference.json": "7a78e6de9e50c29b7460b0b3d1902291019f7a3f2cad6caca9fc984548ad705c",
   "train_fps.bin": "34ab234408d53b4680896c3958b8b93b1ed86f011aa7fbaeedfc661a997eba68"
  },
  "sources": {

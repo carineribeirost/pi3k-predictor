@@ -1,6 +1,6 @@
 """Convert the legacy RandomForest pickles into the compact binary the app evaluates.
 
-Usage: uv run python export_models.py <legacy-repo> <out.bin.zst> <golden.json>
+Usage: uv run python export_models.py <legacy-repo> <out.bin.zst> <streamlit_predictions.json>
 
 Layout (little-endian), zstd-compressed:
     b"PI3KRF02"
@@ -26,7 +26,7 @@ import zstandard
 LEAF = 255
 MAGIC = b"PI3KRF02"
 
-legacy_repo, out_path, golden_path = sys.argv[1:4]
+legacy_repo, out_path, predictions_path = sys.argv[1:4]
 paths = glob.glob(os.path.join(legacy_repo, "model", "*.pkl"))
 forests = []
 for p in paths:
@@ -98,9 +98,9 @@ def forest_proba(trees, x):
 
 
 decoded = decode(bytes(buf))
-golden = json.load(open(golden_path))
+captured = json.load(open(predictions_path))
 rng = np.random.default_rng(0)
-inputs = np.vstack([np.array([r["bits"] for r in golden["rows"]]), rng.integers(0, 2, size=(300, 32))])
+inputs = np.vstack([np.array([r["bits"] for r in captured["rows"]]), rng.integers(0, 2, size=(300, 32))])
 expected = np.array([m.predict_proba(inputs)[:, 1] for m in forests]).T
 got = np.array([[forest_proba(t, x) for t in decoded] for x in inputs])
 max_err = float(np.abs(got - expected).max())
