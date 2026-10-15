@@ -1,6 +1,6 @@
 [package]
 name = "pi3k-predictor"
-version = "0.1.1"
+version = "0.1.2"
 description = "PI3Kα activity predictor"
 authors = ["carineribeirost"]
 edition = "2024"
