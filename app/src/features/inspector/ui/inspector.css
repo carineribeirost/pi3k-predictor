@@ -126,9 +126,16 @@
   padding: 3px 4px;
   border-radius: 4px;
 }
-.bits li:hover,
-.bits li:focus {
+.bits li.on {
+  cursor: pointer;
+}
+.bits li.on:hover,
+.bits li:focus-visible {
   background: var(--surface-2);
+}
+.bits li.picked {
+  background: var(--surface-2);
+  box-shadow: inset 2px 0 0 var(--accent);
 }
 .bits li:not(.on) {
   opacity: 0.6;

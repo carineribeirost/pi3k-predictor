@@ -7,7 +7,8 @@
 }
 .chart-strip .tabs {
   align-items: center;
-  padding: 0 12px;
+  /* right padding clears the absolutely positioned charts toggle */
+  padding: 0 120px 0 12px;
 }
 .chart-hint {
   margin-left: auto;

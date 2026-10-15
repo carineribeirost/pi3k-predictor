@@ -113,9 +113,10 @@ function Properties({ json }: { json: string | null }) {
 
 export function Inspector({ row, reference, threshold }: Props) {
   const p = row.prediction;
-  const [hoverBit, setHoverBit] = useState<number | null>(null);
+  const [pickedBit, setPickedBit] = useState<number | null>(null);
   const [highlights, setHighlights] = useState<Map<number, Highlight>>(new Map());
   const smiles = row.canonical ?? row.smiles;
+  const togglePick = (slot: number) => setPickedBit((s) => (s === slot ? null : slot));
 
   const bits = useMemo(
     () =>
@@ -183,7 +184,7 @@ export function Inspector({ row, reference, threshold }: Props) {
           smiles={smiles}
           width={340}
           height={230}
-          highlight={hoverBit === null ? undefined : highlights.get(hoverBit)}
+          highlight={pickedBit !== null && (p.bits >>> pickedBit) & 1 ? highlights.get(pickedBit) : undefined}
           className="mol-card insp-mol"
         />
         <p className="mono insp-smiles">
@@ -264,19 +265,23 @@ export function Inspector({ row, reference, threshold }: Props) {
 
       <Section title="Bit explanation" open={false}>
         <p className="muted">
-          The model reads 32 Morgan fingerprint bits. Hover a bit to highlight atoms that typically set it (hashed bits
-          can collide, so this is approximate).
+          The model reads 32 Morgan fingerprint bits. Click a set bit to highlight the atoms that typically set it in
+          the structure above (hashed bits can collide, so this is approximate).
         </p>
         <ul className="bits">
           {bits.map((b) => (
             <li
               key={b.bit}
-              onMouseEnter={() => setHoverBit(b.slot)}
-              onMouseLeave={() => setHoverBit(null)}
-              onFocus={() => setHoverBit(b.slot)}
-              onBlur={() => setHoverBit(null)}
-              tabIndex={0}
-              className={b.on ? "on" : undefined}
+              role={b.on ? "button" : undefined}
+              tabIndex={b.on ? 0 : undefined}
+              aria-pressed={b.on ? pickedBit === b.slot : undefined}
+              onClick={b.on ? () => togglePick(b.slot) : undefined}
+              onKeyDown={(e) => {
+                if (!b.on || (e.key !== "Enter" && e.key !== " ")) return;
+                e.preventDefault();
+                togglePick(b.slot);
+              }}
+              className={b.on ? (pickedBit === b.slot ? "on picked" : "on") : undefined}
             >
               <span className="mono">{b.bit}</span>
               <span className={`dot ${b.on ? "dot-on" : ""}`} aria-label={b.on ? "set" : "not set"} />
